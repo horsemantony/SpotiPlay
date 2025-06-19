@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -72,6 +73,13 @@ class MainActivity : ComponentActivity() {
                         mutableStateOf(arrayOf<String>())
                     }
 
+                    var error by remember {
+                        mutableStateOf("")
+                    }
+                    var error2 by remember {
+                        mutableStateOf("")
+                    }
+
 
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -94,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         OutlinedTextField(
                             value = song,
                             onValueChange = {song = it},
-                            placeholder ={ Text("e.g. Finest") }
+                            placeholder ={ Text("Song Title") }
                         )
                         Spacer(modifier = Modifier.size(30.dp))
 
@@ -102,15 +110,15 @@ class MainActivity : ComponentActivity() {
                         OutlinedTextField(
                             value = artist,
                             onValueChange = {artist = it},
-                            placeholder ={ Text("e.g. Finest") }
+                            placeholder ={ Text("Artist Name") }
                         )
                         Spacer(modifier = Modifier.size(30.dp))
 
-                        //Text Box for rating
+                        //Text Box for Rating
                         OutlinedTextField(
                             value = rating,
                             onValueChange = {rating = it},
-                            placeholder ={ Text("e.g. Finest") }
+                            placeholder ={ Text("Rating (1 - 5)") }
                         )
                         Spacer(modifier = Modifier.size(30.dp))
 
@@ -118,21 +126,76 @@ class MainActivity : ComponentActivity() {
                         OutlinedTextField(
                             value = comment,
                             onValueChange = {comment = it},
-                            placeholder ={ Text("e.g. Finest") }
+                            placeholder ={ Text("Comment about Song") }
                         )
                         Spacer(modifier = Modifier.size(30.dp))
 
+                        //Error message
+                        Text(
+                            text = error,
+                            modifier = Modifier,
+                            color = Color.Red
+                            )
+                        Text(
+                            text = error2,
+                            modifier = Modifier,
+                            color = Color.Red
+                        )
+                        Spacer(modifier = Modifier.size(30.dp))
 
-
+                        //Button that adds songs to playlist
                         Button(
                             onClick = {
+                                if (song.isNotBlank() && artist.isNotBlank() && rating.isNotBlank() && comment.isNotBlank()){
+                                    songArray += song
+                                    song = ""
+                                    artistArray += artist
+                                    artist = ""
+                                    ratingArray += rating
+                                    rating = ""
+                                    commentArray += comment
+                                    comment = ""
 
+                                    error = ""
+                                    error2 = ""
+                                }else{
+                                    error = "Invalid Input! Try again"
+                                    error2 = "Tip: Make sure everything is filled in"
+                                }
 
-                            }) {
+                            }
+                        ) {
                             Text(text = "Add to Playlist")
                         }
 
 
+                        Row {
+                            //Exit Button
+                            Button(
+                                onClick = {
+                                    finishAffinity()
+                                }
+                            ) {
+                                Text("Exit App")
+                            }
+
+                            //View Playlist Button
+                            Button(
+                                onClick = {
+                                    val intent = Intent(this@MainActivity,DetailedView::class.java).apply {
+                                        putExtra("song", songArray)
+                                        putExtra("artist", artistArray)
+                                        putExtra("rating", ratingArray)
+                                        putExtra("comment", commentArray)
+                                    }
+                                    startActivity(intent)
+
+                                }
+                            ) {
+                                Text("View PlayList")
+                            }
+
+                        }
 
 
                     }
