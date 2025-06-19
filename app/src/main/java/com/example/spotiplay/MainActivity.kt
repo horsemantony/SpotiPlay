@@ -146,7 +146,7 @@ class MainActivity : ComponentActivity() {
                         //Button that adds songs to playlist
                         Button(
                             onClick = {
-                                if (song.isNotBlank() && artist.isNotBlank() && rating.isNotBlank() && comment.isNotBlank()){
+                                if (song.isNotBlank() && artist.isNotBlank() && comment.isNotBlank() && rating.isNotBlank()){
                                     songArray += song
                                     song = ""
                                     artistArray += artist
@@ -158,17 +158,16 @@ class MainActivity : ComponentActivity() {
 
                                     error = ""
                                     error2 = ""
-                                }else{
+                                }
+                                else{
                                     error = "Invalid Input! Try again"
                                     error2 = "Tip: Make sure everything is filled in"
                                 }
-
                             }
                         ) {
                             Text(text = "Add to Playlist")
                         }
-
-
+                        
                         Row {
                             //Exit Button
                             Button(
@@ -182,13 +181,20 @@ class MainActivity : ComponentActivity() {
                             //View Playlist Button
                             Button(
                                 onClick = {
-                                    val intent = Intent(this@MainActivity,DetailedView::class.java).apply {
-                                        putExtra("song", songArray)
-                                        putExtra("artist", artistArray)
-                                        putExtra("rating", ratingArray)
-                                        putExtra("comment", commentArray)
+
+                                    if (songArray.size == 4){
+                                        val intent = Intent(this@MainActivity,DetailedView::class.java).apply {
+                                            putExtra("song", songArray)
+                                            putExtra("artist", artistArray)
+                                            putExtra("rating", ratingArray)
+                                            putExtra("comment", commentArray)
+                                        }
+                                        startActivity(intent)
+                                    }else{
+                                        error = "you can not create a playlist with"
+                                        error2 = "less than 4 songs"
                                     }
-                                    startActivity(intent)
+
 
                                 }
                             ) {
