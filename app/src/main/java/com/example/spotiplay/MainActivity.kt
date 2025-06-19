@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Text(text = "Add to Playlist")
                         }
-                        
+
                         Row {
                             //Exit Button
                             Button(
